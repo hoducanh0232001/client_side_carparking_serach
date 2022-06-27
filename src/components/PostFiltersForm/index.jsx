@@ -1,7 +1,14 @@
 import React, {useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from 'axios';
-import {convertTimestamp} from './Casting'
+import {convertTimestamp,CreateQrCode} from './Casting'
+// import "./styles.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+// import { CreateQrCode } from 'next-qrcode';
+import Popup from 'reactjs-popup';
+import ReactDOM from "react-dom";
+
+
 
 PostFiltersForm.propTypes ={
 onSubmit: PropTypes.func,
@@ -13,6 +20,27 @@ PostFiltersForm.defaultProps = {
 function PostFiltersForm() {
     const [searchTerm ,setSearchTerm] = useState('');
     const [posts,setPosts]=useState([])
+
+
+    const [show, setShow] = useState(false);
+  const [selectedData, setSelectedData] = useState({});
+
+  const hanldeClick = (selectedRec) => {
+    setSelectedData(selectedRec);
+    setShow(true);
+  };
+  const hideModal = () => {
+    setShow(false);
+  };
+
+  const Modal = ({ handleClose, details }) => {
+    return (
+      <div>
+        
+      </div>
+    );
+  };
+  // change here
 
     useEffect(() => {
         const loadPosts = async () => {
@@ -54,13 +82,14 @@ function PostFiltersForm() {
                 <td>STT</td>
                 <td>Mã đỗ xe</td>
                 <td>Loại xe</td>
-                <td>Giá</td>
+                <td>Loại vé</td>
                 <td>Vị trí</td>
                 <td>Thời gian vào</td>
                 <td>Thời gian ra</td>
                 <td>Tổng thời gian</td>
                 <td>Tổng tiền</td>
                 <td>Trạng thái</td>
+                
             </tr>
         </thead>
         <tbody>
@@ -98,15 +127,21 @@ function PostFiltersForm() {
                  </td>
                 <td>{parking.total_time}</td>
                 <td>{parking.earned_amount}</td>
-                <td>{parking.paid_status == 1 ? <console class="label label-success">Paid</console> : <console class="label label-danger">Not Paid</console>}
+                <td>{parking.paid_status == 1 ? <console class="label label-success">Đã thanh toán</console> : <console class="label label-danger">Chưa thanh toán</console>}
                 </td>
+                
+                   {/* <a href="#" onClick={() => CreateQr()}>
+                  More details
+                  </a> */}
+              {/* <td> { CreateQrCode()} </td> */}
+              {/* <button type="button" onclick="printThis()">Print</button> */}
 
             </tr>
              
         }
         </tbody>
     </table>)}
-  
+    {show && <Modal details={selectedData} handleClose={hideModal} />}
       </div>
 
 
